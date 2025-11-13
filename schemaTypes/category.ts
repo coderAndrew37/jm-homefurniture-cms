@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export const category = defineType({
   name: 'category',
@@ -15,7 +15,7 @@ export const category = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'name', maxLength: 96},
+      options: { source: 'name', maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -28,10 +28,19 @@ export const category = defineType({
       name: 'image',
       title: 'Category Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe the image for accessibility and SEO.',
+          validation: (Rule) => Rule.required().error('Alt text is required'),
+        },
+      ],
     }),
   ],
   preview: {
-    select: {title: 'name', media: 'image'},
+    select: { title: 'name', media: 'image' },
   },
 })
