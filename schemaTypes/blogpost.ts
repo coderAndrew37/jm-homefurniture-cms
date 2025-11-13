@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export const blogPost = defineType({
   name: 'blogPost',
@@ -15,19 +15,22 @@ export const blogPost = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'title', maxLength: 96},
+      options: { source: 'title', maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
+    // ✅ New Author Reference
     defineField({
       name: 'author',
       title: 'Author',
-      type: 'string',
+      type: 'reference',
+      to: [{ type: 'author' }],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'mainImage',
       title: 'Main Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     defineField({
       name: 'excerpt',
@@ -39,7 +42,7 @@ export const blogPost = defineType({
       name: 'content',
       title: 'Content',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{ type: 'block' }],
     }),
     defineField({
       name: 'publishedAt',
@@ -51,17 +54,27 @@ export const blogPost = defineType({
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'blogCategory' }] }],
     }),
   ],
   orderings: [
     {
       title: 'Published Date, New → Old',
       name: 'publishedAtDesc',
-      by: [{field: 'publishedAt', direction: 'desc'}],
+      by: [{ field: 'publishedAt', direction: 'desc' }],
     },
   ],
   preview: {
-    select: {title: 'title', media: 'mainImage', subtitle: 'author'},
+    select: {
+      title: 'title',
+      media: 'mainImage',
+      subtitle: 'author.name',
+    },
   },
 })
